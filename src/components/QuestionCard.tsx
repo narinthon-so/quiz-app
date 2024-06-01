@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Question} from '../types/types';
 
 interface QuestionCardProps {
@@ -8,15 +8,32 @@ interface QuestionCardProps {
 }
 
 const QuestionCard: React.FC<QuestionCardProps> = ({question, onAnswer}) => {
+  const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null);
+
+  const handlePress = (answerId: string) => {
+    setSelectedAnswerId(answerId);
+    onAnswer(answerId);
+  };
+
   return (
     <View style={styles.card}>
       <Text style={styles.questionText}>{question.text}</Text>
       {question.answers.map(answer => (
-        <Button
+        <TouchableOpacity
           key={answer.id}
-          title={answer.text}
-          onPress={() => onAnswer(answer.id)}
-        />
+          style={[
+            styles.answerButton,
+            selectedAnswerId === answer.id && styles.selectedAnswerButton,
+          ]}
+          onPress={() => handlePress(answer.id)}>
+          <Text
+            style={[
+              styles.answerText,
+              selectedAnswerId === answer.id && styles.selectedAnswerText,
+            ]}>
+            {answer.text}
+          </Text>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -24,18 +41,33 @@ const QuestionCard: React.FC<QuestionCardProps> = ({question, onAnswer}) => {
 
 const styles = StyleSheet.create({
   card: {
+    marginBottom: 20,
     padding: 20,
-    marginVertical: 10,
-    backgroundColor: 'white',
-    borderRadius: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
+    shadowRadius: 10,
+    elevation: 5,
   },
   questionText: {
     fontSize: 18,
-    marginBottom: 10,
+    marginBottom: 20,
+  },
+  answerButton: {
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+  },
+  selectedAnswerButton: {
+    backgroundColor: '#cce5ff',
+  },
+  answerText: {
+    fontSize: 16,
+  },
+  selectedAnswerText: {
+    color: '#0056b3',
   },
 });
 

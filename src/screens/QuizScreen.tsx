@@ -1,4 +1,3 @@
-// src/screens/QuizScreen.tsx
 import React, {useState, useEffect} from 'react';
 import {ScrollView, StyleSheet, Button, Text, View} from 'react-native';
 import QuestionCard from '../components/QuestionCard';
